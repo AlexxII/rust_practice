@@ -1,4 +1,4 @@
-use rust_practice::iterators::ring_buffer::RingBuffer;
+use rust_practice::iterators::ring_buffer_re::RingBuffer;
 
 fn main() {
     let mut buffer: RingBuffer<i32> = RingBuffer::new(4);
