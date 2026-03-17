@@ -21,6 +21,27 @@ impl<'a, T> IntoIterator for &'a RingBuffer<T> {
     }
 }
 
+pub struct RingBufferIterMut<'a, T> {
+    ring: &'a mut RingBuffer<T>,
+    index: usize,
+    reamaining: usize,
+}
+
+impl<'a, T> Iterator for &'a mut RingBufferIterMut<'a, T> {
+    type Item = &'a mut T;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.reamaining == 0 {
+            return None;
+        }
+        let value = self.ring.buffer[self.index].as_mut()?;
+        self.reamaining -= 1;
+        self.index = (self.index + 1) % self.ring.capacity;
+
+        let ptr: *mut T = value;
+        unsafe { Some(&mut *ptr) }
+    }
+}
+
 impl<'a, T> Iterator for RingBufferIter<'a, T> {
     type Item = &'a T;
     fn next(&mut self) -> Option<Self::Item> {
@@ -51,6 +72,16 @@ impl<'a, T> RingBuffer<T> {
             ring: self,
             index: self.head,
             remaining: self.len,
+        }
+    }
+
+    pub fn iter_mut(&'a mut self) -> RingBufferIterMut<'a, T> {
+        let head = (*self).head;
+        let len = (*self).len;
+        RingBufferIterMut {
+            ring: self,
+            index: head,
+            reamaining: len,
         }
     }
 

@@ -9,7 +9,8 @@ fn main() {
     buffer.push(4);
     buffer.push(5);
     println!("{:?}", buffer);
-    for i in &buffer {
+    for i in buffer.iter_mut() {
         println!("{i}");
     }
+    println!("{:?}", buffer);
 }
