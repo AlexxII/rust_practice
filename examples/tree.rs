@@ -14,4 +14,7 @@ fn main() {
 
     let dfs: Vec<_> = root.dfs().map(|n| n.value).collect();
     println!("{:?}", dfs);
+
+    let bfs: Vec<_> = root.bfs().map(|n| n.value).collect();
+    println!("{:?}", bfs);
 }

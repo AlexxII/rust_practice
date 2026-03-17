@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 pub struct Node<T> {
     pub value: T,
     children: Vec<Node<T>>,
@@ -18,10 +20,20 @@ impl<T> Node<T> {
     pub fn dfs(&self) -> DfsIter<'_, T> {
         DfsIter { stack: vec![self] }
     }
+
+    pub fn bfs(&self) -> BfsIter<'_, T> {
+        let mut queue = VecDeque::new();
+        queue.push_back(self);
+        BfsIter { queue: queue }
+    }
 }
 
 pub struct DfsIter<'a, T> {
     stack: Vec<&'a Node<T>>,
+}
+
+pub struct BfsIter<'a, T> {
+    queue: VecDeque<&'a Node<T>>,
 }
 
 impl<'a, T> Iterator for DfsIter<'a, T> {
@@ -33,6 +45,18 @@ impl<'a, T> Iterator for DfsIter<'a, T> {
             self.stack.push(child);
         }
 
+        Some(node)
+    }
+}
+
+impl<'a, T> Iterator for BfsIter<'a, T> {
+    type Item = &'a Node<T>;
+    fn next(&mut self) -> Option<Self::Item> {
+        let node = self.queue.pop_front()?;
+
+        for child in &node.children {
+            self.queue.push_back(child);
+        }
         Some(node)
     }
 }
