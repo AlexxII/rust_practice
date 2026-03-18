@@ -1,4 +1,5 @@
-#[derive(Debug)]
+use std::fmt::{Debug, Display};
+
 pub struct RingBuffer<T> {
     buffer: Vec<Option<T>>,
     head: usize,
@@ -31,6 +32,41 @@ pub struct RingBufferIterMut<'a, T> {
     buffer: &'a mut RingBuffer<T>,
     index: usize,
     remaining: usize,
+}
+
+impl<T: Display> Display for RingBuffer<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[")?;
+        let mut first = true;
+        for val in self.iter() {
+            if !first {
+                write!(f, ", ")?;
+            }
+            first = false;
+            write!(f, "{}", val)?;
+        }
+        write!(f, "]")?;
+        Ok(())
+    }
+
+    // fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    //     write!(f, "[")?;
+    //     for (i, val) in self.iter().enumerate() {
+    //         write!(f, "{}", val)?;
+    //         if i + 1 != self.len() {
+    //             write!(f, ", ")?;
+    //         }
+    //     }
+    //     write!(f, "]")?;
+    //     Ok(())
+    // }
+}
+
+impl<T: Debug> Debug for RingBuffer<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "RingBuffer(len={}) ", self.len)?;
+        f.debug_list().entries(self.iter()).finish()
+    }
 }
 
 impl<'a, T> Iterator for RingBufferIterMut<'a, T> {

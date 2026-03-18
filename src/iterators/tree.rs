@@ -1,11 +1,13 @@
 use std::collections::VecDeque;
+use std::fmt::{Debug, Formatter};
+use std::process::Child;
 
 pub struct Node<T> {
     pub value: T,
     children: Vec<Node<T>>,
 }
 
-impl<T> Node<T> {
+impl<T: Debug> Node<T> {
     pub fn new(value: T) -> Self {
         Self {
             value,
@@ -26,6 +28,17 @@ impl<T> Node<T> {
         queue.push_back(self);
         BfsIter { queue: queue }
     }
+
+    fn fmt_with_ident(&self, f: &mut Formatter<'_>, ident: usize) -> std::fmt::Result {
+        for _ in 0..ident {
+            write!(f, " ")?;
+        }
+        writeln!(f, "{:?}", self.value)?;
+        for child in &self.children {
+            child.fmt_with_ident(f, ident + 1)?;
+        }
+        Ok(())
+    }
 }
 
 pub struct DfsIter<'a, T> {
@@ -34,6 +47,12 @@ pub struct DfsIter<'a, T> {
 
 pub struct BfsIter<'a, T> {
     queue: VecDeque<&'a Node<T>>,
+}
+
+impl<T: Debug> Debug for Node<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.fmt_with_ident(f, 0)
+    }
 }
 
 impl<'a, T> Iterator for DfsIter<'a, T> {

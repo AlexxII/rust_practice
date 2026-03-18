@@ -1,4 +1,4 @@
-use rust_practice::iterators::ring_buffer_re::RingBuffer;
+use rust_practice::iterators::ring_buffer::RingBuffer;
 
 fn main() {
     let mut buffer: RingBuffer<i32> = RingBuffer::new(4);
@@ -9,8 +9,8 @@ fn main() {
     buffer.push(4);
     buffer.push(5);
     println!("{:?}", buffer);
-    for i in buffer.iter_mut() {
-        println!("{i}");
-    }
-    println!("{:?}", buffer);
+    println!("{}", buffer);
+    // for i in buffer.iter() {
+    //     println!("{i}");
+    // }
 }

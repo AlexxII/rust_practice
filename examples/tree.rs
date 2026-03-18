@@ -11,6 +11,7 @@ fn main() {
 
     root.add_child(b);
     root.add_child(c);
+    println!("{:?}", root);
 
     let dfs: Vec<_> = root.dfs().map(|n| n.value).collect();
     println!("{:?}", dfs);
