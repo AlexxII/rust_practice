@@ -28,6 +28,18 @@ impl<'a, T> Iterator for RingBufferIter<'a, T> {
     }
 }
 
+impl<T: Clone> Clone for RingBuffer<T> {
+    fn clone(&self) -> Self {
+        Self {
+            buffer: self.buffer.clone(),
+            head: self.head,
+            tail: self.tail,
+            len: self.len,
+            capacity: self.capacity,
+        }
+    }
+}
+
 pub struct RingBufferIterMut<'a, T> {
     buffer: &'a mut RingBuffer<T>,
     index: usize,

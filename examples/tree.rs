@@ -11,11 +11,14 @@ fn main() {
 
     root.add_child(b);
     root.add_child(c);
-    println!("{:?}", root);
-
-    let dfs: Vec<_> = root.dfs().map(|n| n.value).collect();
-    println!("{:?}", dfs);
-
-    let bfs: Vec<_> = root.bfs().map(|n| n.value).collect();
-    println!("{:?}", bfs);
+    let mut root_copy = root.clone();
+    root_copy.add_child(Node::new("Q"));
+    println!("root_copy -  {:?}", root_copy);
+    println!("root - {:?}", root);
+    //
+    // let dfs: Vec<_> = root.dfs().map(|n| n.value).collect();
+    // println!("{:?}", dfs);
+    //
+    // let bfs: Vec<_> = root.bfs().map(|n| n.value).collect();
+    // println!("{:?}", bfs);
 }
