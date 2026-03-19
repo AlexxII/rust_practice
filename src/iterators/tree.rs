@@ -29,6 +29,16 @@ impl<T> Node<T> {
     }
 }
 
+impl<T: PartialEq> PartialEq for Node<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.value == other.value && self.children.len() == other.children.len()
+        && self.children
+            .iter()
+            .zip(other.children.iter())
+            .all(|(a, b)| a.eq(b))
+    }
+}
+
 impl<T: Debug> Node<T> {
     fn fmt_with_ident(&self, f: &mut Formatter<'_>, ident: usize) -> std::fmt::Result {
         for _ in 0..ident {

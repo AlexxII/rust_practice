@@ -40,6 +40,24 @@ impl<T: Clone> Clone for RingBuffer<T> {
     }
 }
 
+impl<T: PartialEq> PartialEq for RingBuffer<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.len == other.len &&
+        self.iter().eq(other.iter())
+    }
+    // fn eq(&self, other: &Self) -> bool {
+    //     self.head == other.head
+    //         && self.tail == other.tail
+    //         && self.len == other.len
+    //         && self.capacity == other.capacity
+    //         && self
+    //             .buffer
+    //             .iter()
+    //             .zip(other.buffer.iter())
+    //             .all(|(a, b)| a == b)
+    // }
+}
+
 pub struct RingBufferIterMut<'a, T> {
     buffer: &'a mut RingBuffer<T>,
     index: usize,
@@ -60,18 +78,6 @@ impl<T: Display> Display for RingBuffer<T> {
         write!(f, "]")?;
         Ok(())
     }
-
-    // fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    //     write!(f, "[")?;
-    //     for (i, val) in self.iter().enumerate() {
-    //         write!(f, "{}", val)?;
-    //         if i + 1 != self.len() {
-    //             write!(f, ", ")?;
-    //         }
-    //     }
-    //     write!(f, "]")?;
-    //     Ok(())
-    // }
 }
 
 impl<T: Debug> Debug for RingBuffer<T> {

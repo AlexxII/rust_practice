@@ -10,6 +10,9 @@ fn main() {
     buffer.push(5);
     println!("{:?}", buffer);
     println!("{}", buffer);
+    let mut buf_copy = buffer.clone();
+    buf_copy.push(9);
+    println!("{}", buffer == buf_copy);
     // for i in buffer.iter() {
     //     println!("{i}");
     // }
