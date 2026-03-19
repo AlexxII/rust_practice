@@ -40,10 +40,22 @@ impl<T: Clone> Clone for RingBuffer<T> {
     }
 }
 
+impl<T> From<Vec<T>> for RingBuffer<T> {
+    fn from(value: Vec<T>) -> Self {
+        let len = value.len();
+        Self {
+            buffer: value.into_iter().map(Some).collect(),
+            head: 0,
+            tail: len,
+            len: len,
+            capacity: len,
+        }
+    }
+}
+
 impl<T: PartialEq> PartialEq for RingBuffer<T> {
     fn eq(&self, other: &Self) -> bool {
-        self.len == other.len &&
-        self.iter().eq(other.iter())
+        self.len == other.len && self.iter().eq(other.iter())
     }
     // fn eq(&self, other: &Self) -> bool {
     //     self.head == other.head

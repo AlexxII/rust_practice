@@ -13,6 +13,10 @@ fn main() {
     let mut buf_copy = buffer.clone();
     buf_copy.push(9);
     println!("{}", buffer == buf_copy);
+
+    let else_buffer: RingBuffer<i32> = vec![1,2,3,4,5,6,7].into();
+    println!("{}", else_buffer);
+    println!("{:?}", else_buffer);
     // for i in buffer.iter() {
     //     println!("{i}");
     // }
