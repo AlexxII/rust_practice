@@ -1,6 +1,9 @@
 use std::collections::VecDeque;
 use std::fmt::{Debug, Formatter};
 
+use serde::Serialize;
+use serde::ser::SerializeStruct;
+
 pub struct Node<T> {
     pub value: T,
     children: Vec<Node<T>>,
@@ -29,13 +32,28 @@ impl<T> Node<T> {
     }
 }
 
+impl<T: Serialize> Serialize for Node<T> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let mut state = serializer.serialize_struct("Node", 2)?;
+
+        state.serialize_field("value", &self.value)?;
+        state.serialize_field("children", &self.children)?;
+        state.end()
+    }
+}
+
 impl<T: PartialEq> PartialEq for Node<T> {
     fn eq(&self, other: &Self) -> bool {
-        self.value == other.value && self.children.len() == other.children.len()
-        && self.children
-            .iter()
-            .zip(other.children.iter())
-            .all(|(a, b)| a.eq(b))
+        self.value == other.value
+            && self.children.len() == other.children.len()
+            && self
+                .children
+                .iter()
+                .zip(other.children.iter())
+                .all(|(a, b)| a.eq(b))
     }
 }
 

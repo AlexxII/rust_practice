@@ -18,6 +18,11 @@ fn main() {
     println!("root_copy -  {:?}", root_copy);
     println!("root - {:?}", root);
     println!("{}", root == root_copy);
+
+    let mut root_e = Node::new("Z");
+    root_e.add_child(Node::new("X"));
+    let json = serde_json::to_string_pretty(&root).unwrap();
+    println!("{}", json);
     //
     // let dfs: Vec<_> = root.dfs().map(|n| n.value).collect();
     // println!("{:?}", dfs);
