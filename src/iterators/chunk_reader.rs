@@ -29,3 +29,26 @@ impl<R: Read> ChunkReader<R> {
         }
     }
 }
+
+impl<T: Display> Display for RingBuffer<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[")?;
+        let mut first = true;
+        for val in self.iter() {
+            if !first {
+                write!(f, ", ")?;
+            }
+            first = false;
+            write!(f, "{}", val)?;
+        }
+        write!(f, "]")?;
+        Ok(())
+    }
+}
+
+impl<T: Debug> Debug for RingBuffer<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "RingBuffer(len={}) ", self.len)?;
+        f.debug_list().entries(self.iter()).finish()
+    }
+}

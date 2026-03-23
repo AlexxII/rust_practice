@@ -1,17 +1,15 @@
-use std::fmt::{Debug, Display};
-
 pub struct RingBuffer<T> {
-    buffer: Vec<Option<T>>,
-    head: usize,
-    tail: usize,
-    len: usize,
-    capacity: usize,
+    pub buffer: Vec<Option<T>>,
+    pub head: usize,
+    pub tail: usize,
+    pub len: usize,
+    pub capacity: usize,
 }
 
 pub struct RingBufferIter<'a, T> {
-    buffer: &'a RingBuffer<T>,
-    index: usize,
-    remaining: usize,
+    pub buffer: &'a RingBuffer<T>,
+    pub index: usize,
+    pub remaining: usize,
 }
 
 impl<'a, T> Iterator for RingBufferIter<'a, T> {
@@ -28,47 +26,6 @@ impl<'a, T> Iterator for RingBufferIter<'a, T> {
     }
 }
 
-impl<T: Clone> Clone for RingBuffer<T> {
-    fn clone(&self) -> Self {
-        Self {
-            buffer: self.buffer.clone(),
-            head: self.head,
-            tail: self.tail,
-            len: self.len,
-            capacity: self.capacity,
-        }
-    }
-}
-
-impl<T> From<Vec<T>> for RingBuffer<T> {
-    fn from(value: Vec<T>) -> Self {
-        let len = value.len();
-        Self {
-            buffer: value.into_iter().map(Some).collect(),
-            head: 0,
-            tail: len,
-            len: len,
-            capacity: len,
-        }
-    }
-}
-
-impl<T: PartialEq> PartialEq for RingBuffer<T> {
-    fn eq(&self, other: &Self) -> bool {
-        self.len == other.len && self.iter().eq(other.iter())
-    }
-    // fn eq(&self, other: &Self) -> bool {
-    //     self.head == other.head
-    //         && self.tail == other.tail
-    //         && self.len == other.len
-    //         && self.capacity == other.capacity
-    //         && self
-    //             .buffer
-    //             .iter()
-    //             .zip(other.buffer.iter())
-    //             .all(|(a, b)| a == b)
-    // }
-}
 
 pub struct RingBufferIterMut<'a, T> {
     buffer: &'a mut RingBuffer<T>,
@@ -76,28 +33,6 @@ pub struct RingBufferIterMut<'a, T> {
     remaining: usize,
 }
 
-impl<T: Display> Display for RingBuffer<T> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[")?;
-        let mut first = true;
-        for val in self.iter() {
-            if !first {
-                write!(f, ", ")?;
-            }
-            first = false;
-            write!(f, "{}", val)?;
-        }
-        write!(f, "]")?;
-        Ok(())
-    }
-}
-
-impl<T: Debug> Debug for RingBuffer<T> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "RingBuffer(len={}) ", self.len)?;
-        f.debug_list().entries(self.iter()).finish()
-    }
-}
 
 impl<'a, T> Iterator for RingBufferIterMut<'a, T> {
     type Item = &'a mut T;
@@ -143,8 +78,6 @@ impl<T> RingBuffer<T> {
             remaining: self.len,
         }
     }
-
-    // pub fn iter_mut(&mut self) ->
 
     pub fn push(&mut self, value: T) {
         self.buffer[self.tail] = Some(value);
