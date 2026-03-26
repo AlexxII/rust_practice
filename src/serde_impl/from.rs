@@ -1,7 +1,5 @@
 // deserialize with transformation with From
 
-use std::result;
-
 use csv::{Reader, ReaderBuilder};
 use serde::Deserialize;
 
